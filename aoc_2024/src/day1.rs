@@ -48,13 +48,8 @@ fn solve_b(input: String) -> i32 {
 fn solve_a(input: String) -> i32 {
     let two_nums_rows = parse_input(&input);
 
-    let capacity = two_nums_rows.len();
-    let mut l_nums = Vec::with_capacity(capacity);
-    let mut r_nums = Vec::with_capacity(capacity);
-    for lr_num in two_nums_rows {
-        l_nums.push(lr_num[0]);
-        r_nums.push(lr_num[1]);
-    }
+    let (mut l_nums, mut r_nums): (Vec<i32>, Vec<i32>) =
+        two_nums_rows.into_iter().map(|lr| (lr[0], lr[1])).unzip();
 
     l_nums.sort();
     r_nums.sort();
