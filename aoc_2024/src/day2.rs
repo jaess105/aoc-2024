@@ -38,21 +38,13 @@ pub fn solve() {
 }
 
 fn solve_b(input: String) -> i32 {
-    let num_rows = parse_input(input);
-    let mut safe_rows_count = 0;
-    for row in num_rows {
-        let diffs: Vec<i32> = calc_diffs(&row);
-        if !is_safe(&diffs) && !any_subset_safe(row) {
-            continue;
-        }
-
-        safe_rows_count += 1;
-    }
-
-    safe_rows_count
+    parse_input(input)
+        .iter()
+        .filter(|row| is_safe(&calc_diffs(row)) || any_subset_safe(&row))
+        .count() as i32
 }
 
-fn any_subset_safe(row: Vec<i32>) -> bool {
+fn any_subset_safe(row: &Vec<i32>) -> bool {
     (0..row.len()).any(|i| {
         let diffs = calc_diffs(&without_index(&row, i));
         is_safe(&diffs)
