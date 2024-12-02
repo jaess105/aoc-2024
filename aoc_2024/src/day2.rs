@@ -67,18 +67,11 @@ fn without_index(v: &Vec<i32>, i: usize) -> Vec<i32> {
 }
 
 fn solve_a(input: String) -> i32 {
-    let num_rows = parse_input(input);
-    let mut safe_rows_count = 0;
-    for row in num_rows {
-        let diffs: Vec<i32> = calc_diffs(&row);
-        if !is_safe(&diffs) {
-            continue;
-        }
-
-        safe_rows_count += 1;
-    }
-
-    safe_rows_count
+    parse_input(input)
+        .iter()
+        .map(calc_diffs)
+        .filter(is_safe)
+        .count() as i32
 }
 
 fn is_safe(diffs: &Vec<i32>) -> bool {
