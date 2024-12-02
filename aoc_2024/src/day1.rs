@@ -27,9 +27,9 @@ impl AocDay for Day1 {
 }
 
 fn solve_b(input: String) -> i32 {
-    let lr_nums = parse_input(&input);
+    let two_nums_rows = parse_input(&input);
 
-    let right_dict = lr_nums
+    let right_occurrences_count = two_nums_rows
         .iter()
         .map(|lr| lr[1])
         .fold(HashMap::new(), |mut agg, num| {
@@ -39,19 +39,19 @@ fn solve_b(input: String) -> i32 {
             agg
         });
 
-    lr_nums
+    two_nums_rows
         .iter()
-        .map(|lr| lr[0] * right_dict.get(&lr[0]).unwrap_or(&0))
+        .map(|lr| lr[0] * right_occurrences_count.get(&lr[0]).unwrap_or(&0))
         .fold(0, |agg, num| agg + num)
 }
 
 fn solve_a(input: String) -> i32 {
-    let lr_nums = parse_input(&input);
+    let two_nums_rows = parse_input(&input);
 
-    let capacity = lr_nums.len();
+    let capacity = two_nums_rows.len();
     let mut l_nums = Vec::with_capacity(capacity);
     let mut r_nums = Vec::with_capacity(capacity);
-    for lr_num in lr_nums {
+    for lr_num in two_nums_rows {
         l_nums.push(lr_num[0]);
         r_nums.push(lr_num[1]);
     }
@@ -69,7 +69,7 @@ fn solve_a(input: String) -> i32 {
 fn parse_input(input: &str) -> Vec<Vec<i32>> {
     let re = Regex::new(r" +").unwrap();
 
-    let lr_nums: Vec<Vec<i32>> = input
+    let two_nums_rows: Vec<Vec<i32>> = input
         .split("\n")
         .map(|line| {
             re.split(line)
@@ -77,7 +77,7 @@ fn parse_input(input: &str) -> Vec<Vec<i32>> {
                 .collect()
         })
         .collect();
-    lr_nums
+    two_nums_rows
 }
 
 #[cfg(test)]
