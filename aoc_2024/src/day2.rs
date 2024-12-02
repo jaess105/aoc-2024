@@ -60,7 +60,10 @@ fn any_subset_safe(row: Vec<i32>) -> bool {
 }
 
 fn without_index(v: &Vec<i32>, i: usize) -> Vec<i32> {
-    [&v[..i], &v[i + 1..]].concat()
+    v.iter()
+        .enumerate()
+        .filter_map(|(j, &x)| if j == i { None } else { Some(x) })
+        .collect()
 }
 
 fn solve_a(input: String) -> i32 {
