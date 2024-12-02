@@ -1,17 +1,29 @@
-use std::{collections::HashMap, fs};
+use std::collections::HashMap;
 
 use regex::Regex;
 
-pub fn solve_day1() {
-    const DAY1_FILE: &str = "resources/day01";
-    let content = fs::read_to_string(DAY1_FILE).expect("Could not find input file!");
+use crate::aoc_day::AocDay;
 
-    let res = solve_a(content);
-    println!("Result of day1 part a is {res}");
+pub struct Day1;
 
-    let content = fs::read_to_string(DAY1_FILE).expect("Could not find input file!");
-    let res = solve_b(content);
-    println!("Result of day1 part b is {res}");
+impl Day1 {
+    pub const fn new() -> Self {
+        Self
+    }
+}
+
+impl AocDay for Day1 {
+    fn get_file_path(&self) -> String {
+        "resources/day01".to_string()
+    }
+
+    fn solve_a(&self, input: String) -> i32 {
+        solve_a(input)
+    }
+
+    fn solve_b(&self, input: String) -> i32 {
+        solve_b(input)
+    }
 }
 
 fn solve_b(input: String) -> i32 {

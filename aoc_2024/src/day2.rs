@@ -1,5 +1,29 @@
 use std::fs;
 
+use crate::aoc_day::AocDay;
+
+pub struct Day2;
+
+impl Day2 {
+    pub const fn new() -> Self {
+        Self
+    }
+}
+
+impl AocDay for Day2 {
+    fn get_file_path(&self) -> String {
+        "resources/day02".to_string()
+    }
+
+    fn solve_a(&self, input: String) -> i32 {
+        solve_a(input)
+    }
+
+    fn solve_b(&self, input: String) -> i32 {
+        solve_b(input)
+    }
+}
+
 pub fn solve() {
     const DAY: &str = "day2";
     const DAY1_FILE: &str = "resources/day02";
