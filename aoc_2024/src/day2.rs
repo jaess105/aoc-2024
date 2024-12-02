@@ -1,5 +1,3 @@
-use std::fs;
-
 use crate::aoc_day::AocDay;
 
 pub struct Day2;
@@ -22,19 +20,6 @@ impl AocDay for Day2 {
     fn solve_b(&self, input: String) -> i32 {
         solve_b(input)
     }
-}
-
-pub fn solve() {
-    const DAY: &str = "day2";
-    const DAY1_FILE: &str = "resources/day02";
-    let content = fs::read_to_string(DAY1_FILE).expect("Could not find input file!");
-
-    let res = solve_a(content);
-    println!("Result of {DAY} part a is {res}");
-
-    let content = fs::read_to_string(DAY1_FILE).expect("Could not find input file!");
-    let res = solve_b(content);
-    println!("Result of {DAY} part b is {res}");
 }
 
 fn solve_b(input: String) -> i32 {
