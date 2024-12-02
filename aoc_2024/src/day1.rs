@@ -29,15 +29,16 @@ impl AocDay for Day1 {
 fn solve_b(input: String) -> i32 {
     let two_nums_rows = parse_input(&input);
 
-    let right_occurrences_count = two_nums_rows
-        .iter()
-        .map(|lr| lr[1])
-        .fold(HashMap::new(), |mut agg, num| {
-            let entry_ref = agg.entry(num).or_insert(0);
-            *entry_ref += 1;
+    let right_occurrences_count =
+        two_nums_rows
+            .iter()
+            .map(|lr| lr[1])
+            .fold(HashMap::new(), |mut agg, num| {
+                let entry_ref = agg.entry(num).or_insert(0);
+                *entry_ref += 1;
 
-            agg
-        });
+                agg
+            });
 
     two_nums_rows
         .iter()
