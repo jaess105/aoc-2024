@@ -100,7 +100,7 @@ fn calc_diffs(row: &Vec<i32>) -> Vec<i32> {
 
 fn parse_input(input: String) -> Vec<Vec<i32>> {
     let nums: Vec<Vec<i32>> = input
-        .split("\n")
+        .lines()
         .map(|line| {
             line.split(" ")
                 .map(|num| i32::from_str_radix(num, 10).unwrap())
