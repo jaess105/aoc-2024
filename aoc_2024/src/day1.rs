@@ -33,8 +33,8 @@ fn solve_b(input: String) -> i32 {
         .iter()
         .map(|lr| lr[1])
         .fold(HashMap::new(), |mut agg, num| {
-            let val = agg.remove(&num).unwrap_or(0);
-            agg.insert(num, val + 1);
+            let entry_ref = agg.entry(num).or_insert(0);
+            *entry_ref += 1;
 
             agg
         });
