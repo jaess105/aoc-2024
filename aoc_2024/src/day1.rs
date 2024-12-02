@@ -70,7 +70,7 @@ fn parse_input(input: &str) -> Vec<Vec<i32>> {
     let re = Regex::new(r" +").unwrap();
 
     let two_nums_rows: Vec<Vec<i32>> = input
-        .split("\n")
+        .lines()
         .map(|line| {
             re.split(line)
                 .map(|num| i32::from_str_radix(num, 10).unwrap())
