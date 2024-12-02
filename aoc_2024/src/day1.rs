@@ -27,7 +27,7 @@ impl AocDay for Day1 {
 }
 
 fn solve_b(input: String) -> i32 {
-    let lr_nums = parse_input(input);
+    let lr_nums = parse_input(&input);
 
     let right_dict = lr_nums
         .iter()
@@ -46,7 +46,7 @@ fn solve_b(input: String) -> i32 {
 }
 
 fn solve_a(input: String) -> i32 {
-    let lr_nums = parse_input(input);
+    let lr_nums = parse_input(&input);
 
     let capacity = lr_nums.len();
     let mut l_nums = Vec::with_capacity(capacity);
@@ -66,7 +66,7 @@ fn solve_a(input: String) -> i32 {
         .fold(0, |agg, num| agg + num)
 }
 
-fn parse_input(input: String) -> Vec<Vec<i32>> {
+fn parse_input(input: &str) -> Vec<Vec<i32>> {
     let re = Regex::new(r" +").unwrap();
 
     let lr_nums: Vec<Vec<i32>> = input
