@@ -14,18 +14,17 @@ fn main() {
     for aoc in aocs {
         solve(&aoc);
     }
-
-    day2::solve();
 }
 
 pub fn solve(aoc: &Box<dyn AocDay>) {
+    let day_number = aoc.get_day_number();
     let day_file = aoc.get_file_path();
     let content = fs::read_to_string(&day_file).expect("Could not find input file!");
 
     let res = aoc.solve_a(content);
-    println!("Result of day1 part a is {res}");
+    println!("Result of Day {day_number} part a is {res}");
 
     let content = fs::read_to_string(&day_file).expect("Could not find input file!");
     let res = aoc.solve_b(content);
-    println!("Result of day1 part b is {res}");
+    println!("Result of Day {day_number} part b is {res}");
 }

@@ -20,6 +20,10 @@ impl AocDay for Day2 {
     fn solve_b(&self, input: String) -> i32 {
         solve_b(input)
     }
+
+    fn get_day_number(&self) -> u8 {
+        2
+    }
 }
 
 fn solve_b(input: String) -> i32 {

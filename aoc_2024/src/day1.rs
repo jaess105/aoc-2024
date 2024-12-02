@@ -13,6 +13,10 @@ impl Day1 {
 }
 
 impl AocDay for Day1 {
+    fn get_day_number(&self) -> u8 {
+        1
+    }
+
     fn get_file_path(&self) -> String {
         "resources/day01".to_string()
     }
