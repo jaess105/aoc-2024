@@ -42,7 +42,7 @@ fn solve_b(input: String) -> i32 {
     two_nums_rows
         .iter()
         .map(|lr| lr[0] * right_occurrences_count.get(&lr[0]).unwrap_or(&0))
-        .fold(0, |agg, num| agg + num)
+        .sum()
 }
 
 fn solve_a(input: String) -> i32 {
@@ -63,7 +63,7 @@ fn solve_a(input: String) -> i32 {
         .iter()
         .zip(r_nums.iter())
         .map(|(l, r)| i32::abs(l - r))
-        .fold(0, |agg, num| agg + num)
+        .sum()
 }
 
 fn parse_input(input: &str) -> Vec<Vec<i32>> {
