@@ -31,64 +31,47 @@ impl AocDay for Day3 {
 }
 
 static NUM_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"mul\((\d+),(\d+)\)").unwrap());
-static ACTION_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(?:do\(\))|(?:don't\(\))").unwrap());
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone, Copy)]
 enum Action {
     DO,
     DONT,
+    MUL(i32, i32),
+}
+
+impl Action {
+    fn multimply(&self) -> i32 {
+        match self {
+            Action::DO | Action::DONT => 0,
+            Action::MUL(first, second) => *first * *second,
+        }
+    }
 }
 
 fn solve_b(input: String) -> i32 {
-    let mut num_caps = NUM_RE.captures_iter(&input);
-    let mut action_caps = ACTION_RE.captures_iter(&input);
-
-    let mut num_cap = num_caps.next();
-    let mut action_cap = action_caps.next();
-    let mut current_action = Action::DO;
-
-    let mut sum = 0;
-
-    loop {
-        if num_cap.is_none() {
-            break;
-        }
-        let num_start = get_start(&num_cap);
-        let action_start = get_start(&action_cap);
-
-        if action_start.is_none() || num_start.unwrap() < action_start.unwrap() {
-            if current_action == Action::DO {
-                sum += unwrap_i32_at(&num_cap, 1) * unwrap_i32_at(&num_cap, 2);
+    let regex = Regex::new(r"(?:mul\((\d+),(\d+)\))|(?:do\(\))|(?:don't\(\))").unwrap();
+    let result = regex
+        .captures_iter(&input)
+        .map(|m| match m.get(0).unwrap().as_str() {
+            "do()" => Action::DO,
+            "don't()" => Action::DONT,
+            _ => Action::MUL(unwrap_i32_at(&m, 1), unwrap_i32_at(&m, 2)),
+        })
+        .fold((Action::DO, 0_i32), |agg, next| match next {
+            Action::DO | Action::DONT => (next, agg.1),
+            _ => {
+                if agg.0 == Action::DONT {
+                    agg
+                } else {
+                    (agg.0, agg.1 + next.multimply())
+                }
             }
+        });
 
-            num_cap = num_caps.next();
-        } else {
-            match unwrap_str_at(&action_cap, 0).as_str() {
-                "do()" => current_action = Action::DO,
-                "don't()" => current_action = Action::DONT,
-                val => panic!("Matched an value that cannot be matched: {val}"),
-            }
+    return result.1;
 
-            action_cap = action_caps.next();
-        }
-    }
-    return sum;
-
-    fn unwrap_i32_at(capture: &Option<Captures<'_>>, i: usize) -> i32 {
-        to_i32(&unwrap_str_at(capture, i))
-    }
-
-    fn unwrap_str_at(capture: &Option<Captures<'_>>, i: usize) -> String {
-        capture
-            .as_ref()
-            .map(|cap| cap.get(i).unwrap().as_str())
-            .unwrap()
-            .to_string()
-    }
-
-    fn get_start(capture: &Option<Captures<'_>>) -> Option<usize> {
-        capture.as_ref().map(|cap| cap.get(0).unwrap().start())
+    fn unwrap_i32_at(capture: &Captures<'_>, i: usize) -> i32 {
+        to_i32(capture.get(i).unwrap().as_str())
     }
 }
 
@@ -107,7 +90,6 @@ fn to_i32(s: &str) -> i32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::day3::ACTION_RE;
 
     use super::{solve_a, solve_b};
 
@@ -121,24 +103,6 @@ mod tests {
     fn test_b() {
         let result = solve_b(TEST_INPUT_B.into());
         assert_eq!(result, 48);
-    }
-
-    #[test]
-    fn test_action() {
-        let was_match = ACTION_RE.is_match(TEST_INPUT_B);
-        assert!(was_match);
-    }
-
-    #[test]
-    fn test_action_regex_dont() {
-        let was_match = ACTION_RE.is_match("don't()");
-        assert!(was_match);
-    }
-
-    #[test]
-    fn test_action_regex_do() {
-        let was_match = ACTION_RE.is_match("do()");
-        assert!(was_match);
     }
 
     #[test]
