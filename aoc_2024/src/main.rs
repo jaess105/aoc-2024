@@ -1,9 +1,4 @@
-use std::fs;
-
-use aoc_day::AocDay;
-use day1::Day1;
-use day2::Day2;
-use day3::Day3;
+use aoc_day::AocDayData;
 
 mod aoc_day;
 mod day1;
@@ -11,26 +6,9 @@ mod day2;
 mod day3;
 
 fn main() {
-    let aocs: Vec<Box<dyn AocDay>> = vec![
-        Box::new(Day1::new()),
-        Box::new(Day2::new()),
-        Box::new(Day3::new()),
-    ];
+    let aocs: Vec<AocDayData> = vec![day1::day1(), day2::day2(), day3::day3()];
 
     for aoc in aocs {
-        solve(&aoc);
+        aoc.solve();
     }
-}
-
-pub fn solve(aoc: &Box<dyn AocDay>) {
-    let day_number = aoc.get_day_number();
-    let day_file = aoc.get_file_path();
-    let content = fs::read_to_string(&day_file).expect("Could not find input file!");
-
-    let res = aoc.solve_a(content);
-    println!("Result of Day {day_number} part a is {res}");
-
-    let content = fs::read_to_string(&day_file).expect("Could not find input file!");
-    let res = aoc.solve_b(content);
-    println!("Result of Day {day_number} part b is {res}");
 }

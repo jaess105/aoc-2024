@@ -2,32 +2,10 @@ use std::collections::HashMap;
 
 use regex::Regex;
 
-use crate::aoc_day::AocDay;
+use crate::aoc_day::AocDayData;
 
-pub struct Day1;
-
-impl Day1 {
-    pub const fn new() -> Self {
-        Self
-    }
-}
-
-impl AocDay for Day1 {
-    fn get_day_number(&self) -> u8 {
-        1
-    }
-
-    fn get_file_path(&self) -> String {
-        "resources/day01".to_string()
-    }
-
-    fn solve_a(&self, input: String) -> i32 {
-        solve_a(input)
-    }
-
-    fn solve_b(&self, input: String) -> i32 {
-        solve_b(input)
-    }
+pub fn day1() -> AocDayData {
+    AocDayData::new(1, "resources/day01".to_string(), solve_a, solve_b)
 }
 
 fn solve_b(input: String) -> i32 {

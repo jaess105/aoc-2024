@@ -1,33 +1,11 @@
 use std::sync::LazyLock;
 
-use regex::{CaptureMatches, Captures, Regex};
+use regex::{Captures, Regex};
 
-use crate::aoc_day::AocDay;
+use crate::aoc_day::AocDayData;
 
-pub struct Day3;
-
-impl Day3 {
-    pub const fn new() -> Self {
-        Self
-    }
-}
-
-impl AocDay for Day3 {
-    fn get_file_path(&self) -> String {
-        "resources/day03".to_string()
-    }
-
-    fn solve_a(&self, input: String) -> i32 {
-        solve_a(input)
-    }
-
-    fn solve_b(&self, input: String) -> i32 {
-        solve_b(input)
-    }
-
-    fn get_day_number(&self) -> u8 {
-        3
-    }
+pub fn day3() -> AocDayData {
+    AocDayData::new(3, "resources/day03".to_string(), solve_a, solve_b)
 }
 
 static NUM_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"mul\((\d+),(\d+)\)").unwrap());
