@@ -33,17 +33,17 @@ impl AocDay for Day3 {
 static NUM_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"mul\((\d+),(\d+)\)").unwrap());
 
 #[derive(PartialEq, Eq, Clone, Copy)]
-enum Action {
+enum Instruction {
     DO,
     DONT,
     MUL(i32, i32),
 }
 
-impl Action {
+impl Instruction {
     fn multimply(&self) -> i32 {
         match self {
-            Action::DO | Action::DONT => 0,
-            Action::MUL(first, second) => *first * *second,
+            Instruction::DO | Instruction::DONT => 0,
+            Instruction::MUL(first, second) => *first * *second,
         }
     }
 }
@@ -53,14 +53,14 @@ fn solve_b(input: String) -> i32 {
     let result = regex
         .captures_iter(&input)
         .map(|m| match m.get(0).unwrap().as_str() {
-            "do()" => Action::DO,
-            "don't()" => Action::DONT,
-            _ => Action::MUL(unwrap_i32_at(&m, 1), unwrap_i32_at(&m, 2)),
+            "do()" => Instruction::DO,
+            "don't()" => Instruction::DONT,
+            _ => Instruction::MUL(unwrap_i32_at(&m, 1), unwrap_i32_at(&m, 2)),
         })
-        .fold((Action::DO, 0_i32), |agg, next| match next {
-            Action::DO | Action::DONT => (next, agg.1),
+        .fold((Instruction::DO, 0_i32), |agg, next| match next {
+            Instruction::DO | Instruction::DONT => (next, agg.1),
             _ => {
-                if agg.0 == Action::DONT {
+                if agg.0 == Instruction::DONT {
                     agg
                 } else {
                     (agg.0, agg.1 + next.multimply())
