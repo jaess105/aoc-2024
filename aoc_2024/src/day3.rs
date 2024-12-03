@@ -41,15 +41,6 @@ enum Instruction {
     MUL(i32, i32),
 }
 
-impl Instruction {
-    fn multimply(&self) -> i32 {
-        match self {
-            Instruction::DO | Instruction::DONT => 0,
-            Instruction::MUL(first, second) => *first * *second,
-        }
-    }
-}
-
 fn solve_b(input: String) -> i32 {
     let result = INSTRUCTION_RE
         .captures_iter(&input)
@@ -58,16 +49,14 @@ fn solve_b(input: String) -> i32 {
             "don't()" => Instruction::DONT,
             _ => Instruction::MUL(unwrap_i32_at(&m, 1), unwrap_i32_at(&m, 2)),
         })
-        .fold((Instruction::DO, 0_i32), |agg, next| match next {
-            Instruction::DO | Instruction::DONT => (next, agg.1),
-            _ => {
-                if agg.0 == Instruction::DONT {
-                    agg
-                } else {
-                    (agg.0, agg.1 + next.multimply())
-                }
-            }
-        });
+        .fold(
+            (Instruction::DO, 0_i32),
+            |(curr_inst, sum), new_inst| match new_inst {
+                Instruction::DO | Instruction::DONT => (new_inst, sum),
+                Instruction::MUL(..) if curr_inst == Instruction::DONT => (curr_inst, sum),
+                Instruction::MUL(first, second) => (curr_inst, sum + first * second),
+            },
+        );
 
     return result.1;
 
