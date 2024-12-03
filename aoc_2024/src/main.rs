@@ -3,13 +3,19 @@ use std::fs;
 use aoc_day::AocDay;
 use day1::Day1;
 use day2::Day2;
+use day3::Day3;
 
 mod aoc_day;
 mod day1;
 mod day2;
+mod day3;
 
 fn main() {
-    let aocs: Vec<Box<dyn AocDay>> = vec![Box::new(Day1::new()), Box::new(Day2::new())];
+    let aocs: Vec<Box<dyn AocDay>> = vec![
+        Box::new(Day1::new()),
+        Box::new(Day2::new()),
+        Box::new(Day3::new()),
+    ];
 
     for aoc in aocs {
         solve(&aoc);
