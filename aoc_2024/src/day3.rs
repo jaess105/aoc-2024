@@ -31,6 +31,8 @@ impl AocDay for Day3 {
 }
 
 static NUM_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"mul\((\d+),(\d+)\)").unwrap());
+static INSTRUCTION_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?:mul\((\d+),(\d+)\))|(?:do\(\))|(?:don't\(\))").unwrap());
 
 #[derive(PartialEq, Eq, Clone, Copy)]
 enum Instruction {
@@ -49,8 +51,7 @@ impl Instruction {
 }
 
 fn solve_b(input: String) -> i32 {
-    let regex = Regex::new(r"(?:mul\((\d+),(\d+)\))|(?:do\(\))|(?:don't\(\))").unwrap();
-    let result = regex
+    let result = INSTRUCTION_RE
         .captures_iter(&input)
         .map(|m| match m.get(0).unwrap().as_str() {
             "do()" => Instruction::DO,
