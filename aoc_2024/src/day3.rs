@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use regex::{Captures, Regex};
 
-use crate::aoc_day::AocDayData;
+use crate::{aoc_day::AocDayData, util::unwrap_to_i32};
 
 pub fn day3() -> AocDayData {
     AocDayData::new(3, "resources/day03".to_string(), solve_a, solve_b)
@@ -39,7 +39,7 @@ fn solve_b(input: String) -> i32 {
     return result.1;
 
     fn unwrap_i32_at(capture: &Captures<'_>, i: usize) -> i32 {
-        to_i32(capture.get(i).unwrap().as_str())
+        unwrap_to_i32(capture.get(i).unwrap().as_str())
     }
 }
 
@@ -47,13 +47,9 @@ fn solve_a(input: String) -> i32 {
     NUM_RE
         .captures_iter(&input)
         .map(|nums| (nums.get(1).unwrap().as_str(), nums.get(2).unwrap().as_str()))
-        .map(|(first, second)| (to_i32(first), to_i32(second)))
+        .map(|(first, second)| (unwrap_to_i32(first), unwrap_to_i32(second)))
         .map(|(first, second)| first * second)
         .sum::<i32>()
-}
-
-fn to_i32(s: &str) -> i32 {
-    i32::from_str_radix(s, 10).unwrap()
 }
 
 #[cfg(test)]
