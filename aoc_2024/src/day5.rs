@@ -1,44 +1,73 @@
-use std::collections::{HashMap, HashSet};
-
 use crate::{aoc_day::AocDayData, util::unwrap_to_i32};
+use std::collections::{HashMap, HashSet};
 
 pub fn day() -> AocDayData {
     AocDayData::new(5, "resources/day05".to_string(), solve_a, solve_b)
 }
 
 fn solve_b(input: String) -> i32 {
-    let (rules, prints) = pares_input(&input);
+    let (rules, prints): (Vec<&str>, Vec<Vec<i32>>) = pares_input(&input);
     let rule_map: HashMap<i32, HashSet<i32>> = generate_rules(rules);
 
-    let mut valid_middle_page_sum = 0;
-    'line_check: for line in prints
-        .iter()
-        .map(|&line| line.split(",").filter(|&el| !el.is_empty()))
-    {
-        let mut already_printed = Vec::new();
-        let line_nums: Vec<_> = line.into_iter().map(|num| unwrap_to_i32(num)).collect();
-        for num in line_nums.iter() {
-            // If there are no successors, the num is always valid.
+    prints
+        .into_iter()
+        .filter(|line_nums| !is_valid(&rule_map, line_nums))
+        .map(|line_nums| line_nums.iter().fold(vec![], order_correctly(&rule_map)))
+        .map(get_middle_value)
+        .sum()
+}
+
+/// Orders a line by inserting an element before the first occurring successor, or appends it,
+/// if none of the present elements were predecessors.
+fn order_correctly<'a>(
+    rule_map: &'a HashMap<i32, HashSet<i32>>,
+) -> impl Fn(Vec<i32>, &i32) -> Vec<i32> + 'a {
+    move |mut agg, num| {
+        for (i, pred) in agg.iter().enumerate() {
             if let Some(successors) = rule_map.get(num) {
-                for pred in already_printed.iter() {
-                    // the line check should be continued, when there was a successor in the already printed numbers.
-                    // As this makes the line invalid
-                    if successors.contains(pred) {
-                        continue 'line_check;
-                    }
+                if successors.contains(pred) {
+                    agg.insert(i, *num);
+                    return agg;
                 }
             }
-
-            already_printed.push(*num);
         }
-        // If we reach this, there was no successor printed before a predecessor, thus the line was valid
-        let len = line_nums.len();
-        assert!(len >= 3, "Not long enough line: {:?}", line_nums);
-
-        valid_middle_page_sum += line_nums[(len - 1) / 2]
+        agg.push(*num);
+        agg
     }
+}
 
-    valid_middle_page_sum
+fn solve_a(input: String) -> i32 {
+    let (rules, prints): (Vec<&str>, Vec<Vec<i32>>) = pares_input(&input);
+    let rule_map: HashMap<i32, HashSet<i32>> = generate_rules(rules);
+
+    prints
+        .into_iter()
+        .filter(|line_nums| is_valid(&rule_map, line_nums))
+        .map(get_middle_value)
+        .sum()
+}
+
+fn get_middle_value(line_nums: Vec<i32>) -> i32 {
+    line_nums[(line_nums.len() - 1) / 2]
+}
+fn is_valid(rule_map: &HashMap<i32, HashSet<i32>>, line_nums: &Vec<i32>) -> bool {
+    line_nums
+        .iter()
+        .fold(Some(Vec::new()), |mut opt_vec, num| {
+            if let Some(mut predecessors) = opt_vec.take() {
+                // If there are no successors, the num is always valid.
+                if let Some(successors) = rule_map.get(num) {
+                    if predecessors.iter().any(|pred| successors.contains(pred)) {
+                        return None;
+                    }
+                }
+                predecessors.push(*num);
+                return Some(predecessors);
+            } else {
+                None
+            }
+        })
+        .is_some()
 }
 
 fn generate_rules(rules: Vec<&str>) -> HashMap<i32, HashSet<i32>> {
@@ -47,56 +76,28 @@ fn generate_rules(rules: Vec<&str>) -> HashMap<i32, HashSet<i32>> {
         .map(|&line| line.trim().split_once("|").unwrap())
         .map(|(pred, suc)| (unwrap_to_i32(pred), unwrap_to_i32(suc)))
         .fold(HashMap::new(), |mut agg, (pred, suc)| {
-            let set = agg.entry(pred).or_insert(HashSet::new());
-
-            set.insert(suc);
-
+            agg.entry(pred).or_insert(HashSet::new()).insert(suc);
             agg
         })
 }
 
-fn solve_a(input: String) -> i32 {
-    let (rules, prints) = pares_input(&input);
-    let rule_map: HashMap<i32, HashSet<i32>> = generate_rules(rules);
-
-    let mut valid_middle_page_sum = 0;
-    'line_check: for line in prints
-        .iter()
-        .map(|&line| line.split(",").filter(|&el| !el.is_empty()))
-    {
-        let mut already_printed = Vec::new();
-        let line_nums: Vec<_> = line.into_iter().map(|num| unwrap_to_i32(num)).collect();
-        for num in line_nums.iter() {
-            // If there are no successors, the num is always valid.
-            if let Some(successors) = rule_map.get(num) {
-                for pred in already_printed.iter() {
-                    // the line check should be continued, when there was a successor in the already printed numbers.
-                    // As this makes the line invalid
-                    if successors.contains(pred) {
-                        continue 'line_check;
-                    }
-                }
-            }
-
-            already_printed.push(*num);
-        }
-        // If we reach this, there was no successor printed before a predecessor, thus the line was valid
-        let len = line_nums.len();
-        assert!(len >= 3, "Not long enough line: {:?}", line_nums);
-
-        valid_middle_page_sum += line_nums[(len - 1) / 2]
-    }
-
-    valid_middle_page_sum
-}
-
-fn pares_input(input: &str) -> (Vec<&str>, Vec<&str>) {
+fn pares_input(input: &str) -> (Vec<&str>, Vec<Vec<i32>>) {
     let lines: Vec<&str> = input.lines().collect();
     let split_idx = lines.iter().position(|&s| s == "").unwrap();
     let (rules, prints) = lines.split_at(split_idx);
     // the first entry is the empty line;
     let prints = prints[1..].to_vec();
-    (rules.to_vec(), prints.to_vec())
+    (rules.to_vec(), prepare_printed_lines(prints))
+}
+
+/// Use the print vector of strings and make it to a vector of vectors of integers.
+/// The strings themselves are currently the lines, and they are converted to i32s.
+fn prepare_printed_lines(prints: Vec<&str>) -> Vec<Vec<i32>> {
+    prints
+        .iter()
+        .map(|&line| line.split(",").filter(|&el| !el.is_empty()))
+        .map(|line| line.into_iter().map(|num| unwrap_to_i32(num)).collect())
+        .collect()
 }
 
 #[cfg(test)]
@@ -136,7 +137,7 @@ mod tests {
     #[test]
     fn test_b() {
         let result = solve_b(TEST_INPUT.into());
-        assert_eq!(result, 9);
+        assert_eq!(result, 123);
     }
 
     #[test]
