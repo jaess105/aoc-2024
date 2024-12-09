@@ -8,7 +8,7 @@ pub fn day1() -> AocDayData {
     AocDayData::new(1, "resources/day01".to_string(), solve_a, solve_b)
 }
 
-fn solve_b(input: String) -> i32 {
+fn solve_b(input: String) -> i64 {
     let two_nums_rows = parse_input(&input);
 
     let right_occurrences_count =
@@ -25,10 +25,10 @@ fn solve_b(input: String) -> i32 {
     two_nums_rows
         .iter()
         .map(|lr| lr[0] * right_occurrences_count.get(&lr[0]).unwrap_or(&0))
-        .sum()
+        .sum::<i32>() as i64
 }
 
-fn solve_a(input: String) -> i32 {
+fn solve_a(input: String) -> i64 {
     let two_nums_rows = parse_input(&input);
 
     let (mut l_nums, mut r_nums): (Vec<i32>, Vec<i32>) =
@@ -41,7 +41,7 @@ fn solve_a(input: String) -> i32 {
         .iter()
         .zip(r_nums.iter())
         .map(|(l, r)| i32::abs(l - r))
-        .sum()
+        .sum::<i32>() as i64
 }
 
 fn parse_input(input: &str) -> Vec<Vec<i32>> {

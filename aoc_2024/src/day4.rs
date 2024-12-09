@@ -6,7 +6,7 @@ pub fn day4() -> AocDayData {
     AocDayData::new(4, "resources/day04".to_string(), solve_a, solve_b)
 }
 
-fn solve_b(input: String) -> i32 {
+fn solve_b(input: String) -> i64 {
     let matrix: Vec<Vec<char>> = parse_input(input);
 
     let starts: Vec<(usize, usize)> = find_position_of(&matrix, 'A');
@@ -14,7 +14,7 @@ fn solve_b(input: String) -> i32 {
     starts
         .iter()
         .map(|idx| count_x_mas(&matrix, *idx))
-        .sum::<i32>() as i32
+        .sum::<i32>() as i64
 }
 
 fn count_x_mas(m: &Vec<Vec<char>>, (i, j): (usize, usize)) -> i32 {
@@ -51,7 +51,7 @@ fn count_x_mas(m: &Vec<Vec<char>>, (i, j): (usize, usize)) -> i32 {
     }
 }
 
-fn solve_a(input: String) -> i32 {
+fn solve_a(input: String) -> i64 {
     let matrix: Vec<Vec<char>> = parse_input(input);
 
     let starts: Vec<(usize, usize)> = find_position_of(&matrix, 'X');
@@ -59,7 +59,7 @@ fn solve_a(input: String) -> i32 {
     starts
         .iter()
         .map(|idx| count_xmas(&matrix, *idx))
-        .sum::<i32>() as i32
+        .sum::<i32>() as i64
 }
 
 fn count_xmas(input: &Vec<Vec<char>>, (i, j): (usize, usize)) -> i32 {

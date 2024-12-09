@@ -4,11 +4,11 @@ pub fn day2() -> AocDayData {
     AocDayData::new(2, "resources/day02".to_string(), solve_a, solve_b)
 }
 
-fn solve_b(input: String) -> i32 {
+fn solve_b(input: String) -> i64 {
     parse_input(input)
         .iter()
         .filter(|row| is_safe(&calc_diffs(row)) || any_subset_safe(&row))
-        .count() as i32
+        .count() as i64
 }
 
 fn any_subset_safe(row: &Vec<i32>) -> bool {
@@ -25,12 +25,12 @@ fn without_index(v: &Vec<i32>, i: usize) -> Vec<i32> {
         .collect()
 }
 
-fn solve_a(input: String) -> i32 {
+fn solve_a(input: String) -> i64 {
     parse_input(input)
         .iter()
         .map(calc_diffs)
         .filter(is_safe)
-        .count() as i32
+        .count() as i64
 }
 
 fn is_safe(diffs: &Vec<i32>) -> bool {

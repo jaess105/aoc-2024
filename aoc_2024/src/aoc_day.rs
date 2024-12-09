@@ -3,23 +3,23 @@ use std::fs;
 pub trait AocDay {
     fn get_day_number(&self) -> u8;
     fn get_file_path(&self) -> String;
-    fn solve_a(&self, input: String) -> i32;
-    fn solve_b(&self, input: String) -> i32;
+    fn solve_a(&self, input: String) -> i64;
+    fn solve_b(&self, input: String) -> i64;
 }
 
 pub struct AocDayData {
     day: u8,
     file: String,
-    solve_a_fn: fn(String) -> i32,
-    solve_b_fn: fn(String) -> i32,
+    solve_a_fn: fn(String) -> i64,
+    solve_b_fn: fn(String) -> i64,
 }
 
 impl AocDayData {
     pub const fn new(
         day: u8,
         file: String,
-        solve_a_fn: fn(String) -> i32,
-        solve_b_fn: fn(String) -> i32,
+        solve_a_fn: fn(String) -> i64,
+        solve_b_fn: fn(String) -> i64,
     ) -> Self {
         Self {
             day,
@@ -52,11 +52,11 @@ impl AocDay for AocDayData {
         self.file.to_string()
     }
 
-    fn solve_a(&self, input: String) -> i32 {
+    fn solve_a(&self, input: String) -> i64 {
         (self.solve_a_fn)(input)
     }
 
-    fn solve_b(&self, input: String) -> i32 {
+    fn solve_b(&self, input: String) -> i64 {
         (self.solve_b_fn)(input)
     }
 }

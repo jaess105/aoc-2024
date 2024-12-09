@@ -5,7 +5,7 @@ pub fn day() -> AocDayData {
     AocDayData::new(5, "resources/day05".to_string(), solve_a, solve_b)
 }
 
-fn solve_b(input: String) -> i32 {
+fn solve_b(input: String) -> i64 {
     let (rules, prints): (Vec<&str>, Vec<Vec<i32>>) = pares_input(&input);
     let rule_map: HashMap<i32, HashSet<i32>> = generate_rules(rules);
 
@@ -14,7 +14,7 @@ fn solve_b(input: String) -> i32 {
         .filter(|line_nums| !is_valid(&rule_map, line_nums))
         .map(|line_nums| line_nums.iter().fold(vec![], order_correctly(&rule_map)))
         .map(get_middle_value)
-        .sum()
+        .sum::<i32>() as i64
 }
 
 /// Orders a line by inserting an element before the first occurring successor, or appends it,
@@ -36,7 +36,7 @@ fn order_correctly<'a>(
     }
 }
 
-fn solve_a(input: String) -> i32 {
+fn solve_a(input: String) -> i64 {
     let (rules, prints): (Vec<&str>, Vec<Vec<i32>>) = pares_input(&input);
     let rule_map: HashMap<i32, HashSet<i32>> = generate_rules(rules);
 
@@ -44,7 +44,7 @@ fn solve_a(input: String) -> i32 {
         .into_iter()
         .filter(|line_nums| is_valid(&rule_map, line_nums))
         .map(get_middle_value)
-        .sum()
+        .sum::<i32>() as i64
 }
 
 fn get_middle_value(line_nums: Vec<i32>) -> i32 {

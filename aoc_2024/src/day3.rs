@@ -19,7 +19,7 @@ enum Instruction {
     MUL(i32, i32),
 }
 
-fn solve_b(input: String) -> i32 {
+fn solve_b(input: String) -> i64 {
     let result = INSTRUCTION_RE
         .captures_iter(&input)
         .map(|m| match m.get(0).unwrap().as_str() {
@@ -36,20 +36,20 @@ fn solve_b(input: String) -> i32 {
             },
         );
 
-    return result.1;
+    return result.1 as i64;
 
     fn unwrap_i32_at(capture: &Captures<'_>, i: usize) -> i32 {
         unwrap_to_i32(capture.get(i).unwrap().as_str())
     }
 }
 
-fn solve_a(input: String) -> i32 {
+fn solve_a(input: String) -> i64 {
     NUM_RE
         .captures_iter(&input)
         .map(|nums| (nums.get(1).unwrap().as_str(), nums.get(2).unwrap().as_str()))
         .map(|(first, second)| (unwrap_to_i32(first), unwrap_to_i32(second)))
         .map(|(first, second)| first * second)
-        .sum::<i32>()
+        .sum::<i32>() as i64
 }
 
 #[cfg(test)]
