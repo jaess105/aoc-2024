@@ -1,7 +1,6 @@
 use crate::aoc_day::AocDayData;
 use crate::util::unwrap_to_i64;
 use std::collections::HashSet;
-use std::fmt::format;
 
 pub fn day() -> AocDayData {
     AocDayData::new(7, "resources/day07".to_string(), solve_a, solve_b)
