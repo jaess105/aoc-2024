@@ -6,6 +6,8 @@ pub fn day() -> AocDayData {
     AocDayData::new(7, "resources/day07".to_string(), solve_a, solve_b)
 }
 
+/// This is completely brute forcing the solution, even the concatenation.
+/// This solution takes slightly longer than the others. Around 5 to 10 s.
 fn solve_b(input: String) -> i64 {
     let vec = parse_input(&input);
     check_all_possible_equations_con(vec)
