@@ -6,6 +6,8 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
+mod day7;
 mod util;
 
 fn main() {
@@ -15,6 +17,8 @@ fn main() {
         day3::day3(),
         day4::day4(),
         day5::day(),
+        day6::day(),
+        day7::day(),
     ];
 
     for aoc in aocs {
