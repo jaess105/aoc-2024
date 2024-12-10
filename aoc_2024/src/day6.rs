@@ -6,6 +6,7 @@ pub fn day() -> AocDayData {
     AocDayData::new(6, "resources/day06".to_string(), solve_a, solve_b)
 }
 
+#[allow(unused_variables)]
 fn solve_b(input: String) -> i64 {
     0
 }
